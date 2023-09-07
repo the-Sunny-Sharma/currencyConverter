@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Currency Converter
+    </title>
+    <style>
+        *
+        {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 30px;
+        }
+        body
+        {
+            background-color: azure;
+        }
+
+    </style>
+</head>
+<body>
+    
+        <h1> Currency Converter using API </h1>
+        <div>
+            <label for="air">INR</label>
+            <input type="number" step="any" id="air" placeholder="Enter amount in &#8377;" />
+        </div>
+        <br><br>
+        <div>
+            <label for="aid">USD</label>
+            <input type="number" step="any" id="aid" placeholder="Enter amount in &#36;" />
+        </div>
+        <br><br>
+        <div>
+            <label for="aid">AED</label>
+            <input type="number" step="any" id="aidirham" placeholder="Enter amount in &#x62f;&#x2e;&#x625;" />
+        </div>
+        <br><br>
+        <div>
+            <label for="aid">EUR</label>
+            <input type="number" step="any" id="aie" placeholder="Enter amount in &#8364;" />
+        </div>
+    
+    <script>
+        let air = document.getElementById("air");
+	    let aid = document.getElementById("aid");
+        
+        let urlINR = "https://api.exchangerate-api.com/v4/latest/INR";
+        air.addEventListener("input", function(){
+            fetch(urlINR)
+            .then(res => res.json())
+            .then(data => {
+                let RupeeTE = data["rates"]["EUR"];
+                let RupeeTD = data["rates"]["USD"];
+                let RupeeTDir = data["rates"]["AED"];
+                let a = parseFloat(air.value);
+                let EurInr = a * RupeeTE;
+                let UsdInr = a * RupeeTD;
+                let AedInr = a * RupeeTDir;
+                aid.value = UsdInr;
+                aie.value = EurInr;
+                aidirham.value = AedInr;
+            })
+        });
+
+        let urlUSD = "https://api.exchangerate-api.com/v4/latest/USD";
+        aid.addEventListener("input", function(){
+            fetch(urlUSD)
+            .then(res => res.json())
+            .then(data=>{
+                let DollarTR = data["rates"]["INR"];
+                let DollarTDir = data["rates"]["AED"];
+                let DollarTE = data["rates"]["EUR"];
+                let b = parseFloat(aid.value);
+                let InrUsd = b * DollarTR;
+                let EurUsd = b * DollarTE;
+                let AedUsd = b * DollarTDir;
+                air.value = InrUsd;
+                aidirham.value = AedUsd;
+                aie.value = EurUsd;
+            })
+        });
+
+
+        let urlAED = "https://api.exchangerate-api.com/v4/latest/AED";
+        aidirham.addEventListener("input",function(){
+            fetch(urlAED)
+            .then(res => res.json())
+            .then(data =>{
+                let DirhamTE = data["rates"]["EUR"];
+                let DirhamTD = data["rates"]["USD"];
+                let DirhamTR = data["rates"]["INR"];
+                let c = parseFloat(aidirham.value);
+                let UsdAed = c * DirhamTD;
+                let InrAed = c * DirhamTR;
+                let EurAed = c * DirhamTE;
+                air.value = InrAed;
+                aid.value = UsdAed;
+                aie.value = EurAed;
+            })
+        })
+
+        let urlEUR = "https://api.exchangerate-api.com/v4/latest/EUR";
+        aie.addEventListener("input",function(){
+            fetch(urlEUR)
+            .then(res => res.json())
+            .then(data =>{
+                let EuroTD = data["rates"]["USD"];
+                let EuroTR = data["rates"]["INR"];
+                let EuroTDir = data["rates"]["AED"];
+                let d = parseFloat(aie.value);
+                let UsdEur = d * EuroTD;
+                let InrEur = d * EuroTR;
+                let AedEur = d * EuroTDir;
+                aid.value = UsdEur;
+                air.value = InrEur;
+                aidirham.value = AedEur;
+            })
+        })
+    </script>
+</body>
+</html>
